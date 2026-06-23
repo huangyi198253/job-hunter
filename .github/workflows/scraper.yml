@@ -1,0 +1,27 @@
+name: Daily Scraper
+
+on:
+  schedule:
+    - cron: '0 22 * * *'  # 06:00 Beijing time (22:00 UTC)
+  workflow_dispatch:  # allow manual trigger
+
+jobs:
+  scrape:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install dependencies
+        run: pip install -r backend/requirements.txt
+      - name: Install Playwright
+        run: pip install playwright && python -m playwright install --with-deps chromium
+      - name: Run scraper
+        run: python -m backend.scraper.runner
+        env:
+          API_BASE_URL: ${{ secrets.API_BASE_URL }}
+          API_TOKEN: ${{ secrets.API_TOKEN }}
+      - name: Scraper result
+        run: echo "Scraper finished at $(date)"
