@@ -7,11 +7,22 @@ from app.routers import auth, jobs, applications, profile
 import os
 
 app = FastAPI(title=settings.APP_NAME, version=settings.VERSION)
-app.add_middleware(CORSMiddleware, allow_origins=["*"], allow_credentials=True, allow_methods=["*"], allow_headers=["*"])
+
+# CORS must be FIRST
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+# API routes
 app.include_router(auth.router)
 app.include_router(jobs.router)
 app.include_router(applications.router)
 app.include_router(profile.router)
+
 os.makedirs(settings.UPLOAD_DIR, exist_ok=True)
 
 
@@ -25,7 +36,7 @@ def health():
     return {"status": "ok", "version": settings.VERSION}
 
 
-# Serve frontend static files in production
-frontend_dist = os.path.join(os.path.dirname(__file__), "..", "..", "frontend", "dist")
-if os.path.exists(frontend_dist):
-    app.mount("/", StaticFiles(directory=frontend_dist, html=True), name="frontend")
+# Serve frontend build files
+dist_path = os.path.join(os.path.dirname(__file__), "..", "..", "frontend", "dist")
+if os.path.exists(dist_path):
+    app.mount("/", StaticFiles(directory=dist_path, html=True), name="frontend")
