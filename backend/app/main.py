@@ -1,5 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
 from app.config import settings
 from app.database import init_db
 from app.routers import auth, jobs, applications, profile
@@ -13,10 +14,18 @@ app.include_router(applications.router)
 app.include_router(profile.router)
 os.makedirs(settings.UPLOAD_DIR, exist_ok=True)
 
+
 @app.on_event("startup")
 def on_startup():
     init_db()
 
+
 @app.get("/api/health")
 def health():
     return {"status": "ok", "version": settings.VERSION}
+
+
+# Serve frontend static files in production
+frontend_dist = os.path.join(os.path.dirname(__file__), "..", "..", "frontend", "dist")
+if os.path.exists(frontend_dist):
+    app.mount("/", StaticFiles(directory=frontend_dist, html=True), name="frontend")

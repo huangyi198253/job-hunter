@@ -21,9 +21,5 @@ export default defineConfig({
         ]
       }
     })
-  ],
-  server: {
-    port: 5173,
-  proxy: { '/api': 'https://job-hunter-api.onrender.com' }
-  }
+  ]
 })
