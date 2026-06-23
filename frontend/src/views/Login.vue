@@ -30,20 +30,20 @@ async function handleLogin() {
       <div class="auth-logo">🎯</div>
       <h1>秋招助手</h1>
       <p class="auth-sub">求职指挥台 · 投递追踪 · AI 复盘</p>
-      <form @submit.prevent="handleLogin">
+      <div>
         <div class="form-group">
           <label>邮箱</label>
-          <input v-model="email" type="email" placeholder="your@email.com" required>
+          <input v-model="email" type="email" placeholder="your@email.com" @keyup.enter="handleLogin">
         </div>
         <div class="form-group">
           <label>密码</label>
-          <input v-model="password" type="password" placeholder="••••••••" required>
+          <input v-model="password" type="password" placeholder="••••••••" @keyup.enter="handleLogin">
         </div>
         <p v-if="error" class="auth-error">{{ error }}</p>
-        <button type="submit" class="btn btn-primary" style="width:100%;margin-top:8px" :disabled="loading">
+        <button class="btn btn-primary" style="width:100%;margin-top:8px" :disabled="loading" @click="handleLogin">
           {{ loading ? '登录中...' : '登 录' }}
         </button>
-      </form>
+      </div>
       <p class="auth-footer">还没有账号？<router-link to="/register">立即注册</router-link></p>
     </div>
   </div>
@@ -55,8 +55,15 @@ async function handleLogin() {
 .auth-logo{font-size:48px;margin-bottom:8px}
 .auth-card h1{font-size:24px;font-weight:700;margin-bottom:4px}
 .auth-sub{font-size:13px;color:var(--gray-400);margin-bottom:24px}
-.auth-error{color:#ef4444;font-size:13px;margin-top:-8px;margin-bottom:12px}
+.auth-error{color:#ef4444;font-size:13px;margin-bottom:12px}
 .auth-footer{font-size:13px;color:var(--gray-400);margin-top:20px}
 .auth-footer a{color:var(--blue);font-weight:600}
-form{text-align:left}
+.form-group{margin-bottom:16px;text-align:left}
+.form-group label{display:block;font-size:13px;font-weight:600;color:var(--gray-500);margin-bottom:6px}
+.form-group input{width:100%;border:2px solid var(--gray-200);border-radius:10px;padding:10px 14px;font-size:15px;outline:none;transition:border-color .15s}
+.form-group input:focus{border-color:var(--blue)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;border:none;border-radius:10px;padding:10px 20px;font-size:14px;font-weight:500;cursor:pointer;transition:background .15s,transform .1s}
+.btn:active{transform:scale(.97)}
+.btn-primary{background:var(--blue);color:#fff}
+.btn-primary:hover{background:#1d4ed8}
 </style>
