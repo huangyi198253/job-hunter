@@ -4,7 +4,7 @@ from app.config import settings
 
 engine = create_engine(
     settings.DATABASE_URL,
-    connect_args={"check_same_thread": False} if "sqlite" in settings.DATABASE_URL else {},
+    connect_args={"check_same_thread": False} if settings.DATABASE_URL.startswith("sqlite") else {},
     pool_pre_ping=True,
     echo=settings.DEBUG,
 )
@@ -21,5 +21,5 @@ def get_db():
         db.close()
 
 def init_db():
-    import app.models  # noqa: ensure all models are loaded
+    import app.models
     Base.metadata.create_all(bind=engine)
