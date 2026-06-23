@@ -2,7 +2,7 @@ services:
   - type: web
     name: job-hunter-api
     env: python
-    buildCommand: cd frontend && npm install && npm run build && cd ../backend && pip install -r requirements.txt
+    buildCommand: npm install --prefix frontend && npm run build --prefix frontend && pip install -r backend/requirements.txt
     startCommand: cd backend && uvicorn app.main:app --host 0.0.0.0 --port $PORT
     envVars:
       - key: DATABASE_URL
