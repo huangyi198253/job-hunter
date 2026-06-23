@@ -8,3 +8,4 @@ uploads/
 dist/
 .tmp/
 !frontend/dist
+frontend/dist
